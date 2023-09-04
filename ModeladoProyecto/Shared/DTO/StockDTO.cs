@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ModeladoProyecto.Shared.DTO
+    {
+    public class StockDTO
+        {
+        public int Id { get; set; } 
+
+        public string Producto {get; set;}
+
+        public int Cantidad { get; set;}
+
+
+        }
+    }

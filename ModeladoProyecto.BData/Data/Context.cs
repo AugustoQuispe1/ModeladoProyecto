@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 using ModeladoProyecto.BData.Data.Entidades;
 
 namespace ModeladoProyecto.BData.Data
-    {
+{ 
     public class Context : DbContext
-        {
-
-        public DbSet<Stock> stock => Set<Stock>();
+    {
 
         public Context(DbContextOptions options) : base(options)
             {
             }
 
-        }
+        public DbSet<Stock> stock {get; set;}
+
+        
+
     }
+}
