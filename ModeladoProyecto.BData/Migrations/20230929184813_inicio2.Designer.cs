@@ -11,8 +11,8 @@ using ModeladoProyecto.BData.Data;
 namespace ModeladoProyecto.BData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230829131314_inicio")]
-    partial class inicio
+    [Migration("20230929184813_inicio2")]
+    partial class inicio2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,7 +48,7 @@ namespace ModeladoProyecto.BData.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "CodStock" }, "CodStock_UQ")
+                    b.HasIndex(new[] { "Id" }, "Id_UQ")
                         .IsUnique();
 
                     b.ToTable("stock");

@@ -9,7 +9,7 @@ using System.Net;
 
 namespace ModeladoProyecto.BData.Data.Entidades
     {
-    [Index(nameof(CodStock), Name = "CodStock_UQ", IsUnique = true)]
+    [Index(nameof(Id), Name = "Id_UQ", IsUnique = true)]
     public class Stock
         {
 
@@ -26,6 +26,8 @@ namespace ModeladoProyecto.BData.Data.Entidades
         [Required(ErrorMessage = "Es necesario introducir el producto obligatorio")]
         [MaxLength(4, ErrorMessage = "Solo se aceptan hasta 30 caracteres en la cantidad")]
         public int Cantidad { get; set; }
+
+
 
         }
     }

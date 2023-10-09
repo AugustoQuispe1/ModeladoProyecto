@@ -1,0 +1,39 @@
+﻿@page "/stock/agregar"
+@inject IHttpServicio http
+@inject NavigationManager navigationManager
+<h3>Nueva Profesion</h3>
+
+<FormStock stock="stock" onValidSubbmit="Grabar" onCancel="Cancelar"/>
+
+
+
+@code {
+	private Stock stock = new Stock();
+
+	private async Task Grabar()
+		{
+		StockDTO stockDTO = new()
+		{
+				CodStock = stock.CodStock,
+				Producto = stock.Producto,
+				Cantidad = stock.Cantidad
+		};
+		var httpRespuesta = await http.Post<StockDTO>("api/stock", stockDTO);
+
+		if (httpRespuesta.Error)
+			{
+			var body = httpRespuesta.HttpResponseMessage;
+			}
+
+		navigationManager.NavigateTo("/stock");
+		}
+
+	private void Cancelar()
+		{
+		navigationManager.NavigateTo("/stock");
+		}
+
+
+	
+
+}

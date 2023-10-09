@@ -45,7 +45,7 @@ namespace ModeladoProyecto.BData.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "CodStock" }, "CodStock_UQ")
+                    b.HasIndex(new[] { "Id" }, "Id_UQ")
                         .IsUnique();
 
                     b.ToTable("stock");

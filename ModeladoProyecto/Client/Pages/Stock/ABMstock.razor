@@ -1,0 +1,114 @@
+﻿@page "/stock"
+@inject IHttpServicio http
+
+<PageTitle>STOCK</PageTitle>
+
+<HeadContent>
+	<meta name="description" content="Listado de stock" />
+</HeadContent>
+
+<h3>Lista de Stock</h3>
+
+<a class="btn btn-primary" href="stock/crear">Agregar item</a>
+
+<table>
+	<tr>
+		<th>Codigo</th>
+		<th>Cod de stock</th>
+		<th>Producto</th>
+		<th>Cantidad</th>
+	</tr>
+
+	@if (Error)
+		{
+		<tr>@Mensaje</tr>
+		}
+	else
+		{
+		@if (stock == null)
+			{
+			<tr>Cargando...</tr>
+			}
+		else if (stock.Count == 0)
+			{
+			<tr>No existen items cargados</tr>
+			}
+		else
+			{
+			@foreach (var item in stock)
+				{
+				<tr>
+					<td>@item.Id</td>
+					<td>@item.CodStock</td>
+					<td>@item.Producto</td>
+					<td>@item.Cantidad</td>
+					<td>
+						<a class="btn btn-primary"
+						   href="stock/modificar/@item.Id">
+						   Modificar
+						</a>
+					</td>
+
+					<td>
+					<button class="btn btn-warning"
+						@onclick="()=>Eliminar(item)">
+					</button>
+					</td>
+				</tr>
+				}
+			}
+		}
+
+</table>
+
+
+@code {
+	List<Stock>? stock;
+	bool Error = false;
+	string Mensaje = "";
+	Stock StockBorrar;
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		await Leer();
+	}
+
+
+
+
+	private async Task Leer()
+	{
+		stock = null;
+		var respuesta = await http.Get<List<Stock>>("api/stock");
+		Error = respuesta.Error;
+		if (!respuesta.Error)
+		{
+			stock = respuesta.Respuesta;
+		}
+		else
+		{
+			Mensaje = await respuesta.ObtenerError();
+		}
+	}
+
+
+
+
+	private async Task Eliminar (Stock stoBorrar)
+		{
+		StockBorrar = stoBorrar;
+
+		var respuesta = await http.Delete($"api/stock/{StockBorrar.Id}");
+
+		if (respuesta.Error)
+		{
+			var body = "No se pudo eliminar";
+		}
+		StockBorrar = null;
+		await Leer();
+
+	}
+
+}

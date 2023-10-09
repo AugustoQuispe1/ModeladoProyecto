@@ -5,7 +5,7 @@
 namespace ModeladoProyecto.BData.Migrations
 {
     /// <inheritdoc />
-    public partial class inicio : Migration
+    public partial class inicio2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,9 +26,9 @@ namespace ModeladoProyecto.BData.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "CodStock_UQ",
+                name: "Id_UQ",
                 table: "stock",
-                column: "CodStock",
+                column: "Id",
                 unique: true);
         }
 

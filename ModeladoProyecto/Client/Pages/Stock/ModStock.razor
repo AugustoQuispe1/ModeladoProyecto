@@ -1,0 +1,56 @@
+﻿@page "/stock/modificar/{stockId:int}"
+@inject IHttpServicio http
+@inject NavigationManager navigationManager
+
+<h3>Modificar Stock</h3>
+
+<FormStock prof="stock" onValidSubbmit="Grabar" onCancel="Cancelar" />
+
+@code {
+	private Stock stock = new();
+	[Parameter] public int stockId { get; set; }
+	string Mensaje = "";
+
+	protected override async Task OnInitializedAsync()
+		{
+		await base.OnInitializedAsync();
+		await Mostrar();
+		}
+
+	private async Task Mostrar()
+		{
+		var respuesta = await http.Get<Stock>($"api/stock/{stockId}");
+
+		if (!respuesta.Error)
+			{
+			stock = respuesta.Respuesta;
+			}
+		else
+			{
+			Mensaje = await respuesta.ObtenerError();
+			}
+
+		}
+
+	private async Task Grabar()
+	{
+		var respuesta = await http.Put<Stock>($"api/stock/{stockId}",
+													stock);
+		if (!respuesta.Error)
+		{
+			var body = respuesta.HttpResponseMessage;
+		}
+
+		navigationManager.NavigateTo("/stock");
+
+	}
+
+	private void Cancelar()
+	{
+		navigationManager.NavigateTo("/stock");
+	}
+
+
+
+}
+
