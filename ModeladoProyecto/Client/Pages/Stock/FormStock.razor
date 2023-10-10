@@ -9,14 +9,14 @@
     </div>
 
     <div class="form-group">
-        <label>Título</label>
+        <label>Producto</label>
         <div>
             <InputText class="form-control" @bind-Value="@stock.Producto" />
             <ValidationMessage For="@(() => stock.Producto)" />
         </div>
     </div>
     <div class="form-group">
-        <label>Título</label>
+        <label>Cantidad</label>
         <div>
             <InputNumber class="form-control" @bind-Value="@stock.Cantidad" />
             <ValidationMessage For="@(() => stock.Cantidad)" />
