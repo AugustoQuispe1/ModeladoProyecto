@@ -18,7 +18,7 @@
     <div class="form-group">
         <label>Cantidad</label>
         <div>
-            <InputNumber class="form-control" @bind-Value="@stock.Cantidad" />
+            <InputText class="form-control" @bind-Value="@stock.Cantidad" />
             <ValidationMessage For="@(() => stock.Cantidad)" />
         </div>
     </div>
@@ -31,5 +31,7 @@
     [Parameter] public Stock stock { get; set; } = new Stock();
     [Parameter] public EventCallback onValidSubbmit { get; set; }
     [Parameter] public EventCallback onCancel { get; set; }
+
+
 
 }

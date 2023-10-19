@@ -5,7 +5,7 @@
 namespace ModeladoProyecto.BData.Migrations
 {
     /// <inheritdoc />
-    public partial class inicio2 : Migration
+    public partial class dale1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,22 +14,16 @@ namespace ModeladoProyecto.BData.Migrations
                 name: "stock",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CodStock = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    Producto = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Cantidad = table.Column<int>(type: "int", maxLength: 4, nullable: false)
+                    Producto = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Cantidad = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_stock", x => x.Id);
+                    table.PrimaryKey("PK_stock", x => x.id);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "Id_UQ",
-                table: "stock",
-                column: "Id",
-                unique: true);
         }
 
         /// <inheritdoc />

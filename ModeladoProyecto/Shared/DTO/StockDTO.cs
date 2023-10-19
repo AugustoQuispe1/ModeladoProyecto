@@ -9,7 +9,7 @@ namespace ModeladoProyecto.Shared.DTO
     {
     public class StockDTO
         {
-        public int Id { get; set; }  //ver que hacer con esto
+        //public int StockId { get; set; }  //ver que hacer con esto
 
         [Required(ErrorMessage = "El nombre del producto es obligatorio")]
         [MaxLength(40, ErrorMessage = "Solo se aceptan hasta 40 caracteres en el nombre del producto")]
@@ -17,8 +17,8 @@ namespace ModeladoProyecto.Shared.DTO
 
 
 		[Required(ErrorMessage = "El nombre del producto es obligatorio")]
-		[MaxLength(4, ErrorMessage = "Solo se aceptan hasta 40 caracteres en el nombre del producto")]
-		public int Cantidad { get; set;}
+		[MaxLength(50, ErrorMessage = "Solo se aceptan hasta 50 digitos en la cantidad")]
+		public string Cantidad { get; set;}
 
 
 		[Required(ErrorMessage = "El codigo de stock es obligatorio")]

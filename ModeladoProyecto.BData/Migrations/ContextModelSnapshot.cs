@@ -23,15 +23,16 @@ namespace ModeladoProyecto.BData.Migrations
 
             modelBuilder.Entity("ModeladoProyecto.BData.Data.Entidades.Stock", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int>("Cantidad")
-                        .HasMaxLength(4)
-                        .HasColumnType("int");
+                    b.Property<string>("Cantidad")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CodStock")
                         .IsRequired()
@@ -40,13 +41,10 @@ namespace ModeladoProyecto.BData.Migrations
 
                     b.Property<string>("Producto")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Id" }, "Id_UQ")
-                        .IsUnique();
+                    b.HasKey("id");
 
                     b.ToTable("stock");
                 });

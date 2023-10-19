@@ -1,68 +1,99 @@
 ﻿@page "/stock"
 @inject IHttpServicio http
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize]
+
 
 <PageTitle>STOCK</PageTitle>
 
-<HeadContent>
-	<meta name="description" content="Listado de stock" />
-</HeadContent>
+<h3 class="text-center">Stock</h3>
 
-<h3>Lista de Stock</h3>
+<html>
+	<head>
+		<meta charshet="utf-8"/>
+		<meta content="width=device-widh, initial-scale=1" name="viewport" />
 
-<a class="btn btn-primary" href="stock/crear">Agregar item</a>
+	</head>
 
-<table>
-	<tr>
-		<th>Codigo</th>
-		<th>Cod de stock</th>
-		<th>Producto</th>
-		<th>Cantidad</th>
-	</tr>
+	<body class="aligin-content-center">
+		div class="insquare">
+    <div class="table-responsive rounded-3">
+        <table class="table table-striped table-hover table-bordered">
+            <thead id="table-headers">
+                <tr>
+                    <th>Id</th>
+                    <th>Codigo de stock</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                </tr>
 
-	@if (Error)
-		{
-		<tr>@Mensaje</tr>
-		}
-	else
-		{
-		@if (stock == null)
-			{
-			<tr>Cargando...</tr>
-			}
-		else if (stock.Count == 0)
-			{
-			<tr>No existen items cargados</tr>
-			}
-		else
-			{
-			@foreach (var item in stock)
-				{
-				<tr>
-					<td>@item.Id</td>
-					<td>@item.CodStock</td>
-					<td>@item.Producto</td>
-					<td>@item.Cantidad</td>
-					<td>
-						<a class="btn btn-primary"
-						   href="stock/modificar/@item.Id">
-						   Modificar
-						</a>
-					</td>
+                @if(Error)
+                {
+                  <tr>@Mensaje</tr>       
+                }
+                else
+                {
+                        
+                
+                @if (stock == null)
+                        {
+                        <tr>Cargando...</tr>
+                        }
+                else if (stock.Count == 0)
+                        {
+                        <tr>No existen los datos</tr>
+                        }
+                else
+                        {
+                        @foreach (var item in stock)
+                            {
+                            <tr>
+                                <td>@item.id</td>
+                                <td>@item.CodStock</td>
+                                <td>@item.Producto</td>
+                                <td>@item.Cantidad</td>
+                               <td>
+                                   <a class="btn btn-primary"
+                                      href="stock/modificar/@item.id">
+                                      Modificar      
+                                   </a>
 
-					<td>
-					<button class="btn btn-warning"
-						@onclick="()=>Eliminar(item)">
-					</button>
-					</td>
-				</tr>
-				}
-			}
-		}
+                               <a class="btn btn-primary"
+                                  @onclick="()=>Eliminar(item)">
+                                  Borrar
 
-</table>
+                               </a>
+                               </td>
+
+                            </tr>
+                            
+                            }
+                }       }
+
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex">
+
+        <button type="button" class="btn btn-info botones" 
+            @onclick="() => AgregarStock()">
+            Nuevo
+        </button>
+	</div>
+
+	</body>
+
+</html>
 
 
 @code {
+	[Inject]
+	private NavigationManager NavigationManager { get; set; }
+
+
+
 	List<Stock>? stock;
 	bool Error = false;
 	string Mensaje = "";
@@ -70,28 +101,35 @@
 
 
 	protected override async Task OnInitializedAsync()
-	{
+		{
 		await base.OnInitializedAsync();
 		await Leer();
-	}
+		}
 
 
 
 
 	private async Task Leer()
-	{
+		{
 		stock = null;
 		var respuesta = await http.Get<List<Stock>>("api/stock");
 		Error = respuesta.Error;
 		if (!respuesta.Error)
-		{
+			{
 			stock = respuesta.Respuesta;
-		}
+			}
 		else
-		{
+			{
 			Mensaje = await respuesta.ObtenerError();
+			}
 		}
-	}
+
+
+	private void AgregarStock()
+		{
+		NavigationManager.NavigateTo("/stock/crear");
+		}
+
 
 
 
@@ -100,7 +138,7 @@
 		{
 		StockBorrar = stoBorrar;
 
-		var respuesta = await http.Delete($"api/stock/{StockBorrar.Id}");
+		var respuesta = await http.Delete($"api/stock/{StockBorrar.id}");
 
 		if (respuesta.Error)
 		{

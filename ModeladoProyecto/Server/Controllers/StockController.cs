@@ -23,20 +23,20 @@ namespace ModeladoProyecto.Server.Controllers
             return await context.stock.ToListAsync();
             }
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Stock>> Get(int Id)
+        public async Task<ActionResult<Stock>> Get(int id)
             {
-            var existe = await context.stock.AnyAsync(x => x.Id == Id);
+            var existe = await context.stock.AnyAsync(x => x.id == id);
             if (!existe)
                 {
-                return NotFound($"El producto {Id} no existe");
+                return NotFound($"El producto {id} no existe");
                 }
-            return await context.stock.FirstOrDefaultAsync(x => x.Id == Id);
+            return await context.stock.FirstOrDefaultAsync(x => x.id == id);
             }
 
         [HttpPost]
         public async Task<ActionResult<int>> Post(StockDTO stock)
             {
-            var entidad = await context.stock.FirstOrDefaultAsync(x => x.Id == stock.Id);
+            var entidad = await context.stock.FirstOrDefaultAsync(x => x.CodStock == stock.CodStock);
 
             if (entidad != null)
                 {
@@ -45,33 +45,34 @@ namespace ModeladoProyecto.Server.Controllers
             try
                 {
                 Stock x = new Stock();
-                x.Id = stock.Id;
+                x.CodStock = stock.CodStock;
                 x.Producto = stock.Producto;
                 x.Cantidad = stock.Cantidad;
 
                 context.stock.Add(x);
                 await context.SaveChangesAsync();
-                return x.Id;
+                return x.id;
 
                 }
             catch (Exception ex) { return BadRequest(ex); }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Editar(StockDTO stockDTO, int Id)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Editar(StockDTO stockDTO, int id)
             {
             var responseApi = new ResponseAPI<int>();
             try
             {
-                var dbStock = await context.stock.FirstOrDefaultAsync(e => e.Id == Id);
+                var dbStock = await context.stock.FirstOrDefaultAsync(e => e.id == id);
                 if (dbStock != null)
                     {
-                    dbStock.Id = stockDTO.Id;
+                    dbStock.id = id;
+                    //dbStock.StockId = stockDTO.StockId;
                     dbStock.Producto = stockDTO.Producto;
                     dbStock.Cantidad = stockDTO.Cantidad;
                     await context.SaveChangesAsync();
                     responseApi.EsCorrecto = true;
-                    responseApi.Valor = dbStock.Id;
+                    responseApi.Valor = dbStock.id;
 
                     }
                 else
@@ -86,24 +87,24 @@ namespace ModeladoProyecto.Server.Controllers
                 responseApi.Mensaje = ex.Message;
                 }
             return Ok(responseApi);
-        }
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int Id)
-            {
-            var existe = await context.stock.AnyAsync(x => x.Id == Id);
-            if (!existe)
-                {
-                return NotFound($"El producto de id={Id} no existe");
-                }
-            Stock juan = new Stock();
-            juan.Id = Id;
-
-            context.Remove(juan);
-
-            await context.SaveChangesAsync();
-
-            return Ok();
             }
+
+
+
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var existe = await context.stock.AnyAsync(x => x.id == id);
+            if (!existe)
+            {
+                return NotFound($"El producto de id={id} no existe");
+            }
+
+            context.Remove(new Stock() { id = id });
+            await context.SaveChangesAsync();
+            return Ok();
+        }
 
 
 
