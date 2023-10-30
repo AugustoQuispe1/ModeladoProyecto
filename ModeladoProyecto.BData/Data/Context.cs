@@ -14,7 +14,7 @@ namespace ModeladoProyecto.BData.Data
         public Context(DbContextOptions options) : base(options)
             {
             }
-
+        //-
         public DbSet<Stock> stock {get; set;}
 
         
