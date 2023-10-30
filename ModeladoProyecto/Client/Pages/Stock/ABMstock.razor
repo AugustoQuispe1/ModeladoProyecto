@@ -74,6 +74,19 @@
             <tbody>
             </tbody>
         </table>
+        <Confirmacion @ref="confirmacion"
+                      verCancelar="true"
+                      verOk="true"
+                      textOk="Aceptar"
+                      Titulo="Borrar especialidad"
+                      onCancel="Cancelar"
+                      onConfirm="Borrar">
+            <div>
+                <h1>Está por borrar la especialidad @StockBorrar.Producto</h1>
+                <br />
+                ¿Está seguro que desea continuar?
+            </div>
+        </Confirmacion>
     </div>
     <div class="d-flex">
 
@@ -89,64 +102,75 @@
 
 
 @code {
-	[Inject]
-	private NavigationManager NavigationManager { get; set; }
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    Confirmacion confirmacion;
+
+    List<Stock>? stock;
+    bool Error = false;
+    string Mensaje = "";
+    Stock StockBorrar;
 
 
-
-	List<Stock>? stock;
-	bool Error = false;
-	string Mensaje = "";
-	Stock StockBorrar;
-
-
-	protected override async Task OnInitializedAsync()
-		{
-		await base.OnInitializedAsync();
-		await Leer();
-		}
-
-
-
-
-	private async Task Leer()
-		{
-		stock = null;
-		var respuesta = await http.Get<List<Stock>>("api/stock");
-		Error = respuesta.Error;
-		if (!respuesta.Error)
-			{
-			stock = respuesta.Respuesta;
-			}
-		else
-			{
-			Mensaje = await respuesta.ObtenerError();
-			}
-		}
-
-
-	private void AgregarStock()
-		{
-		NavigationManager.NavigateTo("/stock/crear");
-		}
+    protected override async Task OnInitializedAsync()
+        {
+        await base.OnInitializedAsync();
+        await Leer();
+        }
 
 
 
 
+    private async Task Leer()
+        {
+        stock = null;
+        var respuesta = await http.Get<List<Stock>>("api/stock");
+        Error = respuesta.Error;
+        if (!respuesta.Error)
+            {
+            stock = respuesta.Respuesta;
+            }
+        else
+            {
+            Mensaje = await respuesta.ObtenerError();
+            }
+        }
 
-	private async Task Eliminar (Stock stoBorrar)
-		{
-		StockBorrar = stoBorrar;
 
-		var respuesta = await http.Delete($"api/stock/{StockBorrar.id}");
+    private void AgregarStock()
+        {
+        NavigationManager.NavigateTo("/stock/crear");
+        }
 
-		if (respuesta.Error)
-		{
-			var body = "No se pudo eliminar";
-		}
-		StockBorrar = null;
-		await Leer();
 
-	}
+
+
+
+    private async Task Eliminar (Stock stoBorrar)
+        {
+        StockBorrar = stoBorrar;
+        confirmacion.Ver();
+        }
+
+    private void Cancelar()
+        {
+        confirmacion.Ocultar();
+        StockBorrar = null;
+        }
+
+    private async Task Borrar()
+        {
+        var respuesta = await http.Delete($"api/stock/{StockBorrar.id}");
+
+        if (respuesta.Error)
+            {
+            var body = "ERROR no se pudo borrar";
+            }
+            Cancelar();
+            await Leer();
+        }
+
+
 
 }
